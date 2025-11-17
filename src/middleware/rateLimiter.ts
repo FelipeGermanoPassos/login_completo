@@ -5,6 +5,7 @@ export const loginLimiter = rateLimit({
   max: 20,
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false },
 });
 
 export const forgotPasswordLimiter = rateLimit({
@@ -12,4 +13,5 @@ export const forgotPasswordLimiter = rateLimit({
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false },
 });

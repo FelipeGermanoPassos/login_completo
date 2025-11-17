@@ -37,22 +37,3 @@ export function buildApp() {
 
   return app;
 }
-import express from 'express';
-import { requestLogger } from './middleware/requestLogger';
-import { errorHandler } from './middleware/errorHandler';
-import { healthRouter } from './routes/health';
-import { authRouter } from './routes/auth';
-import { meRouter } from './routes/me';
-
-export function buildApp() {
-  const app = express();
-  app.use(express.json());
-  app.use(requestLogger);
-
-  app.use(healthRouter);
-  app.use(authRouter);
-  app.use(meRouter);
-
-  app.use(errorHandler);
-  return app;
-}
