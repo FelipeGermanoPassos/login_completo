@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 2rem;
+      }
+      form {
+        display: grid;
+        gap: 0.75rem;
+        max-width: 360px;
+      }
+      input {
+        padding: 0.6rem 0.8rem;
+        font-size: 1rem;
+      }
+      button {
+        padding: 0.6rem 0.8rem;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .tokens {
+        margin-top: 1rem;
+        white-space: pre-wrap;
+      }
+      .error {
+        color: #b00020;
+        margin-top: 0.5rem;
+      }
+      .ok {
+        color: #006400;
+        margin-top: 0.5rem;
+      }
+      code {
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Login</h1>
+    <form id="login-form">
+      <label>
+        Email
+        <input id="email" type="email" required />
+      </label>
+      <label>
+        Senha
+        <input id="password" type="password" required />
+      </label>
+      <button type="submit">Entrar</button>
+      <div id="msg" class="error" hidden></div>
+    </form>
+
+    <div class="tokens" id="tokens" hidden>
+      <p class="ok">Login efetuado!</p>
+      <div>Access Token: <code id="access"></code></div>
+      <div>Refresh Token: <code id="refresh"></code></div>
+      <div>Session ID: <code id="sid"></code></div>
+    </div>
+
+    <script>
+      const form = document.getElementById('login-form');
+      const msg = document.getElementById('msg');
+      const tokens = document.getElementById('tokens');
+      const accessEl = document.getElementById('access');
+      const refreshEl = document.getElementById('refresh');
+      const sidEl = document.getElementById('sid');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.hidden = true;
+        tokens.hidden = true;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        try {
+          const res = await fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data?.error || 'Falha no login');
+          accessEl.textContent = data.accessToken;
+          refreshEl.textContent = data.refreshToken;
+          sidEl.textContent = data.sessionId;
+          tokens.hidden = false;
+        } catch (err) {
+          msg.textContent = err.message;
+          msg.hidden = false;
+        }
+      });
+    </script>
+  </body>
+</html>

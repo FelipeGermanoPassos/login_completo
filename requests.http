@@ -1,0 +1,67 @@
+### Health
+GET http://localhost:3000/health
+
+### Registro
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "password": "secret123"
+}
+
+### Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "secret123"
+}
+
+### Refresh Token
+POST http://localhost:3000/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Me (autenticado)
+GET http://localhost:3000/me
+Authorization: Bearer {{accessToken}}
+
+### Listar sessões
+GET http://localhost:3000/auth/sessions
+Authorization: Bearer {{accessToken}}
+
+### Revogar sessão (troque :id)
+POST http://localhost:3000/auth/sessions/:id/revoke
+Authorization: Bearer {{accessToken}}
+
+### Logout (revoga refresh atual)
+POST http://localhost:3000/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "refreshTokenId": "{{sid}}"
+}
+
+### Esqueci a senha
+POST http://localhost:3000/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "alice@example.com"
+}
+
+### Reset de senha
+POST http://localhost:3000/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "{{resetToken}}",
+  "password": "novaSenha123"
+}
